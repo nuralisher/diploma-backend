@@ -1,0 +1,18 @@
+{% extends 'menu/base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<h1>main page</h1>
+{% if mainCategories %}
+    {% for el in mainCategories %}
+        <div class="alert alert-warning mt-2">
+            <h3>{{ el.name }}</h3>
+        </div>
+    {% endfor %}
+{% else %}
+<p>your category doesnt exist</p>
+{% endif %}
+{% endblock %}
