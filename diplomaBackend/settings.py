@@ -131,7 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-    'http://mojno-menu.herokuapp.com/',
-]
+CORS_ORIGIN_ALLOW_ALL = True
+
