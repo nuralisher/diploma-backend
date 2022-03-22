@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'rest_framework',
+
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +136,5 @@ db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 CORS_ORIGIN_ALLOW_ALL = True
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_root')
