@@ -85,12 +85,12 @@ WSGI_APPLICATION = 'diplomaBackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'd4ml8p40e3bb3i',
-        'HOST': 'ec2-54-85-113-73.compute-1.amazonaws.com',
-        'PORT': 5432,
         'USER': 'flcrjjogwfgbxb',
-        'PASSWORD': 'af3d3f4cf70fcb53f51fc3f96d86fd1964f80c2745f1bce2bd7b690a084e86b9'
+        'PASSWORD': 'af3d3f4cf70fcb53f51fc3f96d86fd1964f80c2745f1bce2bd7b690a084e86b9',
+        'HOST': 'ec2-54-85-113-73.compute-1.amazonaws.com',
+        'PORT': 5432
     }
 }
 # import dj_database_url
