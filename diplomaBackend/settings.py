@@ -85,14 +85,18 @@ WSGI_APPLICATION = 'diplomaBackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd4ml8p40e3bb3i',
+        'HOST': 'ec2-54-85-113-73.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'flcrjjogwfgbxb',
+        'PASSWORD': 'af3d3f4cf70fcb53f51fc3f96d86fd1964f80c2745f1bce2bd7b690a084e86b9'
     }
 }
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
-
+# import dj_database_url
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
+# postgres://flcrjjogwfgbxb:af3d3f4cf70fcb53f51fc3f96d86fd1964f80c2745f1bce2bd7b690a084e86b9@ec2-54-85-113-73.compute-1.amazonaws.com:5432/d4ml8p40e3bb3i
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
