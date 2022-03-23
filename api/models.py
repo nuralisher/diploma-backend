@@ -8,7 +8,7 @@ from django.db import models
 import qrcode.image.svg
 
 class Table(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, editable=False)
     qr_code = models.ImageField(upload_to='qr_codes', blank=True)
 
     def save(self, *args, **kwargs):
