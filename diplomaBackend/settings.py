@@ -60,6 +60,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 ROOT_URLCONF = 'diplomaBackend.urls'
 
 TEMPLATES = [
@@ -83,22 +85,22 @@ WSGI_APPLICATION = 'diplomaBackend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'd4ml8p40e3bb3i',
-#         'USER': 'flcrjjogwfgbxb',
-#         'PASSWORD': 'af3d3f4cf70fcb53f51fc3f96d86fd1964f80c2745f1bce2bd7b690a084e86b9',
-#         'HOST': 'ec2-54-85-113-73.compute-1.amazonaws.com',
-#         'PORT': 5432
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'demo_1',
+        'USER': 'postgres',
+        'PASSWORD': 'Alisher11',
+        'HOST': 'database-2.cbe1b25uahqs.us-east-1.rds.amazonaws.com',
+        'PORT': 5432
+    }
+}
 # import dj_database_url
 # db_from_env = dj_database_url.config(conn_max_age=600)
 # DATABASES['default'].update(db_from_env)
@@ -141,17 +143,17 @@ USE_TZ = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-import django_heroku
+# import django_heroku
 #
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_URL = "/static/"
 # django_heroku.settings(locals())
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
-CORS_ORIGIN_ALLOW_ALL = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
