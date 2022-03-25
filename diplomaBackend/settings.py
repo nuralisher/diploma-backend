@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'storages',
 
     'api',
 ]
@@ -157,3 +158,13 @@ DATABASES['default'].update(db_from_env)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
+
+
+AWS_ACCESS_KEY_ID = 'AKIAZLHEX6YL7ZVKRN57'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'alisher'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

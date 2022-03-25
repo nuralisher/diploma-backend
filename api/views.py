@@ -7,6 +7,6 @@ class ListTable(generics.ListCreateAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
 
-class DetailTable(generics.RetrieveAPIView):
+class DetailTable(generics.RetrieveUpdateDestroyAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
