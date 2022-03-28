@@ -1,10 +1,24 @@
 {% extends 'menu/base.html' %}
 
-{% block title %}
+{% comment %} {% block title %}
 {{ title }}
-{% endblock %}
+{% endblock %} {% endcomment %}
+
 
 {% block content %}
+<h1>zero day</h1>
+{% if category %}
+    {% for i in category %}
+    <li>
+        <a href="{{ i.get_absolute_url }}">{{i.name}}</a>
+        {% if i.picture %}
+        <p><img style="max-height: 100px; max-width: 100px" src="{{i.picture.url}}"></p>
+    </li>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% comment %} <p>qrID -> {{ num }}</p>
 <h1>main page</h1>
 {% if mainCategories %}
     {% for el in mainCategories %}
@@ -14,5 +28,5 @@
     {% endfor %}
 {% else %}
 <p>your category doesnt exist</p>
-{% endif %}
+{% endif %} {% endcomment %}
 {% endblock %}

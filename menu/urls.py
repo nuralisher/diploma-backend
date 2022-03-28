@@ -1,9 +1,10 @@
-
 from django.urls import path, include
-from . import views
+from .views import *
 
 
 urlpatterns = [
-    path('', views.index, name='ind'),
-    path('about/', views.about, name='ab')
+    path('', index, name='main'),
+    path('category/<slug:category_slug>/', show_category, name='category'),
+    path('product/<slug:product_slug>/', show_product, name='product'),
+
 ]
