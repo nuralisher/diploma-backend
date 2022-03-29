@@ -188,6 +188,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        # "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        # "dj_rest_auth.utils.JWTCookieAuthentication",
     ],
 }
 
@@ -210,6 +213,20 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+# SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+# SOCIALACCOUNT_EMAIL_REQUIRED = False
+#
+# REST_USE_JWT = True
+# from datetime import timedelta
+#
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+#     'ROTATE_REFRESH_TOKENS': True,
+#     'BLACKLIST_AFTER_ROTATION': True,
+#     'UPDATE_LAST_LOGIN': True,
+# }
+
 # client id
 # 1098164137427-36o76rrb70cfoji1lckuln21jg1tremd.apps.googleusercontent.com
 # client secret
