@@ -56,3 +56,21 @@ def restaurantCategories(request, pk):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'error': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@api_view(['GET', 'POST'])
+def categoryMenus(request, pk):
+    try:
+        restaurant = MenuCategory.objects.get(id=pk)
+    except MenuCategory.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+
+    if request.method == 'GET':
+        menus = Menu.objects.filter(category_id=pk)
+        serializer = MenuSerializer(menus, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = Menu(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'error': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
