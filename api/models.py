@@ -31,7 +31,11 @@ def remove_file_from_s3(sender, instance, using, **kwargs):
     instance.qr_code.delete(save=False)
 
 
+class MenuCategory(models.Model):
+    name = models.CharField(max_length=255)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_categories')
+
+
 class Menu(models.Model):
     name = models.CharField(max_length=255)
-    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='menus')
-
+    category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, related_name='menus')

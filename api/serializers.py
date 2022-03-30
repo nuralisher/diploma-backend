@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import Table, Restaurant, Menu
+from .models import Table, Restaurant, Menu, MenuCategory
+
 
 class TableSerializer(serializers.ModelSerializer):
-    qr_code = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Table
@@ -12,20 +12,38 @@ class TableSerializer(serializers.ModelSerializer):
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'name', 'restaurant')
+        fields = ('id', 'name', 'category')
+
+
+class MenuCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MenuCategory
+        fields = ('id', 'name', 'restaurant', 'menus')
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
-    menus = MenuSerializer(read_only=True)
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'menus', 'tables')
+        fields = ('id', 'name', 'menu_categories', 'tables')
+
+
+class RestaurantCategory(serializers.ModelSerializer):
+    class Meta:
+        model = MenuCategory
+        fields = ('id', 'name')
+
+class TableRestaurantSerializer(serializers.ModelSerializer):
+    menu_categories = RestaurantCategory(many=True)
+
+    class Meta:
+        model = Restaurant
+        fields = ('id', 'name', 'menu_categories')
 
 
 class TableDetailSerializer(serializers.ModelSerializer):
-    qr_code = serializers.ImageField(read_only=True)
-    restaurant = RestaurantSerializer(read_only=True)
+    restaurant = TableRestaurantSerializer()
 
     class Meta:
         model = Table
