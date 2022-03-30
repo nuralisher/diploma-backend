@@ -11,6 +11,6 @@ urlpatterns = [
     path('menu-categories/<int:pk>/', MenuCategoryDetail.as_view()),
     path('restaurants/', RestaurantList.as_view()),
     path('restaurants/<int:pk>/', RestaurantDetail.as_view()),
-    path('restaurants/<int:pk>/menu-categories', restaurantCategories),
-    path('menu-categories/<int:pk>/menus', categoryMenus),
+    path('restaurants/<int:pk>/menu-categories/', restaurantCategories),
+    path('menu-categories/<int:pk>/menus/', categoryMenus),
 ]
