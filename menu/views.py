@@ -37,7 +37,9 @@ def show_product(request, product_slug):
     }
     return render(request, 'menu/product.html', context=context)
 
-
+def basket():
+    name = 'zero'
+    return name
 
 
 

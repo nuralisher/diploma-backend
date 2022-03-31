@@ -1,0 +1,25 @@
+{% extends 'menu/base.html' %}
+
+{% block content %}
+
+{% if category %}
+    {% comment %} <p>{{ category.name }}</p>
+    <img style="max-heigth:100px;max-width:100px;" src="{{category.picture.url }}"> {% endcomment %}
+    {% for i in product %}
+        <li style="border-style:solid; margin:10px; padding:10px; width:300px; list-style-type:none">
+            <a onclick="ff()" href="" style="text-decoration:none; color:black">
+            <p>{{ i.name }}</p>
+            <p>{{ i.price }} тг</p>
+            <img style="max-heigth:100px;max-width:100px;" src="{{i.picture.url }}">
+            <p>{{ i.title }}</p>
+            </a>
+        </li>
+    {% endfor %}
+{% endif %}
+<p id="eee"><p>
+<script>
+    function ff(){
+        document.getElementById("eee").innerHTML = 'ero'
+    }
+</script>
+{% endblock %}

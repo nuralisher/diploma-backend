@@ -19,6 +19,7 @@ class MainCategories(models.Model):
 
 class Products(models.Model):
     name = models.CharField('Наименование продукта', max_length=250)
+    price = models.IntegerField('Цена', null=True)
     picture = models.ImageField('Картинка', upload_to = 'uploads/% Y/% m/% d/', null=True)
     title = models.TextField('Описание', blank=True)
     cat = models.ForeignKey(MainCategories, on_delete=models.PROTECT, null=True, verbose_name='Товары по катергорию')

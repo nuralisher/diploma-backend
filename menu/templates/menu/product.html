@@ -1,0 +1,14 @@
+{% extends 'menu/base.html' %}
+
+
+{% block content %}
+
+{% if product %}
+    <li>
+        <p>{{ product.name }}</p>
+        <p>{{ product.price }}</p>
+        <img style="max-height:100px; max-width:100px;" src="{{product.picture.url}}">
+        <p>{{ product.title }}</p> 
+    </li>    
+{% endif %}
+{% endblock %}
