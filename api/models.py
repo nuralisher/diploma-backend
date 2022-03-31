@@ -38,4 +38,7 @@ class MenuCategory(models.Model):
 
 class Menu(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.IntegerField()
+    image = models.ImageField(upload_to='menu_images', blank=True)
     category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, related_name='menus')
