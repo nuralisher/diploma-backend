@@ -42,3 +42,9 @@ class Menu(models.Model):
     price = models.IntegerField()
     image = models.ImageField(upload_to='menu_images', blank=True)
     category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, related_name='menus')
+
+
+@receiver(models.signals.post_delete, sender=Menu)
+def remove_file_from_s3(sender, instance, using, **kwargs):
+    instance.image.delete(save=False)
+

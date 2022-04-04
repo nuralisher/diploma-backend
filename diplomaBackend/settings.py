@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'storages',
 
     'api',
+    'user_management',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
