@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'user_management',
 ]
 
+AUTH_USER_MODEL = 'user_management.User'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 
@@ -94,6 +96,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'diplomaBackend.wsgi.application'
+# ASGI_APPLICATION = 'diplomaBackend.asgi.application'
 
 
 # Database
@@ -179,7 +182,6 @@ AWS_STORAGE_BUCKET_NAME = 'alisher'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 REST_FRAMEWORK = {
@@ -189,9 +191,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        # "rest_framework.authentication.BasicAuthentication",
-        # "rest_framework.authentication.SessionAuthentication",
-        # "dj_rest_auth.utils.JWTCookieAuthentication",
     ],
 }
 
@@ -202,6 +201,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -214,21 +214,12 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-# SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
-# SOCIALACCOUNT_EMAIL_REQUIRED = False
-#
-# REST_USE_JWT = True
-# from datetime import timedelta
-#
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-#     'ROTATE_REFRESH_TOKENS': True,
-#     'BLACKLIST_AFTER_ROTATION': True,
-#     'UPDATE_LAST_LOGIN': True,
-# }
 
-# client id
-# 1098164137427-36o76rrb70cfoji1lckuln21jg1tremd.apps.googleusercontent.com
-# client secret
-# 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
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

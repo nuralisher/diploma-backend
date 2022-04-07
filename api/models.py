@@ -5,10 +5,15 @@ from django.core.files import File
 from django.db import models
 import qrcode.image.svg
 from django.dispatch import receiver
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
+from user_management.models import Employee
 
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
+    employees = models.ManyToManyField(Employee, related_name='restaurants')
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='my_restaurants', on_delete=models.CASCADE)
 
 
 class Table(models.Model):
@@ -48,3 +53,15 @@ class Menu(models.Model):
 def remove_file_from_s3(sender, instance, using, **kwargs):
     instance.image.delete(save=False)
 
+
+class Position(models.Model):
+    class PositionType(models.TextChoices):
+        ADMIN = 'ADMIN', _('Админ')
+        WAITER = 'WAITER', _('Официант')
+        MANAGER = 'MANAGER', _('Менеджер')
+    type = models.CharField(max_length=10, choices=PositionType.choices)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='positions')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='positions')
+
+    class Meta:
+        unique_together = ('employee', 'restaurant')

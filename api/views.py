@@ -2,9 +2,11 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import generics, status
-from .models import Table, Menu, Restaurant, MenuCategory
-from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, MenuCategorySerializer
+from .models import Table, Menu, Restaurant, MenuCategory, Position
+from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
+    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer
 from rest_framework.decorators import api_view
+from rest_framework import permissions
 
 class ListTable(generics.ListCreateAPIView):
     queryset = Table.objects.all()
@@ -31,8 +33,13 @@ class MenuCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MenuCategorySerializer
 
 class RestaurantList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
+    serializer_class = RestaurantCreateListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class RestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Restaurant.objects.all()
@@ -73,4 +80,13 @@ def categoryMenus(request, pk):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'error': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class PositionList(generics.ListCreateAPIView):
+    queryset = Position.objects.all()
+    serializer_class = PositionSerializer
+
+class PositionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Position.objects.all()
+    serializer_class = PositionSerializer
 

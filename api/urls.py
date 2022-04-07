@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import ListTable, DetailTable, MenuList, MenuDetail, RestaurantList, RestaurantDetail, MenuCategoryList, \
-    MenuCategoryDetail, restaurantCategories, categoryMenus
+    MenuCategoryDetail, restaurantCategories, categoryMenus, PositionList, PositionDetail
 
 urlpatterns = [
     path('tables/', ListTable.as_view()),
@@ -13,4 +13,6 @@ urlpatterns = [
     path('restaurants/<int:pk>/', RestaurantDetail.as_view()),
     path('restaurants/<int:pk>/menu-categories/', restaurantCategories),
     path('menu-categories/<int:pk>/menus/', categoryMenus),
+    path('positions/', PositionList.as_view()),
+    path('positions/<int:pk>', PositionDetail.as_view()),
 ]

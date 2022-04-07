@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Table, Restaurant, Menu, MenuCategory
+from .models import Table, Restaurant, Menu, MenuCategory, Position
 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -48,3 +48,21 @@ class TableDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = ('id', 'qr_code', 'restaurant')
+
+
+
+class RestaurantCreateListSerializer(serializers.ModelSerializer):
+    menu_categories = MenuCategorySerializer(read_only=True, many=True)
+    tables = TableRestaurantSerializer(read_only=True, many=True)
+    owner = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Restaurant
+        fields = ('id', 'name', 'menu_categories', 'tables', 'owner')
+
+
+class PositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = ('id', 'type', 'employee', 'restaurant')
+
