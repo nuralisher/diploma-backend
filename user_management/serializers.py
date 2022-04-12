@@ -16,6 +16,8 @@ class ClientRegistrationSerializer(RegisterSerializer):
         return user
 
 class EmployeeRegistrationSerializer(RegisterSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
 
     def save(self, request):
         user = super(EmployeeRegistrationSerializer, self).save(request)
