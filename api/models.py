@@ -1,6 +1,7 @@
 import uuid
 from io import BytesIO
 import qrcode
+from django.contrib.auth.models import User
 from django.core.files import File
 from django.db import models
 import qrcode.image.svg

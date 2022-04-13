@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import generics, status
+
+from user_management.models import Employee
 from .models import Table, Menu, Restaurant, MenuCategory, Position
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
     MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer
@@ -38,7 +40,11 @@ class RestaurantList(generics.ListCreateAPIView):
     serializer_class = RestaurantCreateListSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        try:
+            employee = Employee.objects.get(user_id=self.request.user.id)
+        except Employee.DoesNotExist as e:
+            return JsonResponse({'error': str(e)}, safe=False)
+        serializer.save(owner=employee)
 
 
 class RestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -89,4 +95,16 @@ class PositionList(generics.ListCreateAPIView):
 class PositionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
+
+
+@api_view(['GET'])
+def get_my_restaurants(request):
+    try:
+        employee = Employee.objects.get(user_id=request.user.id)
+    except Employee.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'GET':
+        restaurants = Restaurant.objects.filter(owner_id=employee.id) | Restaurant.objects.filter(employees__in=[employee])
+        serializer = RestaurantCreateListSerializer(restaurants, many=True)
+        return Response(serializer.data)
 
