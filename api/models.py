@@ -13,7 +13,7 @@ from user_management.models import Employee
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     employees = models.ManyToManyField(Employee, related_name='restaurants')
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='my_restaurants', on_delete=models.CASCADE)
+    owner = models.ForeignKey(Employee, related_name='my_restaurants', on_delete=models.CASCADE)
 
 
 class Table(models.Model):
