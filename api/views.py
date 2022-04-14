@@ -108,3 +108,16 @@ def get_my_restaurants(request):
         serializer = RestaurantCreateListSerializer(restaurants, many=True)
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+def get_all_restaurants(request):
+    try:
+        employee = Employee.objects.get(user_id=request.user.id)
+    except Employee.DoesNotExist as e:
+        serializer = RestaurantCreateListSerializer(Restaurant.objects.all(), many=True)
+        return Response(serializer.data)
+    if request.method == 'GET':
+        restaurants = Restaurant.objects.exclude(owner_id=employee.id) | Restaurant.objects.filter(employees__in=[employee])
+        serializer = RestaurantCreateListSerializer(restaurants, many=True)
+        return Response(serializer.data)
+
