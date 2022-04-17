@@ -24,3 +24,4 @@ urlpatterns = [
     path('positions/<int:pk>', PositionDetail.as_view()),
 ]
 # test
+
