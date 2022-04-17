@@ -4,6 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics, status
 
 from user_management.models import Employee
+from user_management.serializers import EmployeeRegistrationSerializer
 from .models import Table, Menu, Restaurant, MenuCategory, Position
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
     MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer
@@ -121,3 +122,48 @@ def get_all_restaurants(request):
         serializer = RestaurantCreateListSerializer(restaurants, many=True)
         return Response(serializer.data)
 
+
+@api_view(['GET', 'POST'])
+def list_add_restaurant_employee(request, pk):
+    try:
+        restaurant = Restaurant.objects.get(id=pk)
+    except Restaurant.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'GET':
+        try:
+            employees = Employee.objects.get(restaurants__in=[restaurant])
+        except Employee.DoesNotExist as e:
+            return JsonResponse([], safe=False)
+        serializer = EmployeeRegistrationSerializer(employees, many=True)
+        return Response(serializer.data)
+    if request.method == 'POST':
+        try:
+            employee = Employee.objects.get(id=request.data.employeeId)
+        except Employee.DoesNotExist as e:
+            return JsonResponse({'error': str(e)}, safe=False)
+        restaurant.employees.push(employee)
+        restaurant.save()
+        serializer = RestaurantCreateListSerializer(restaurant)
+        return Response(serializer.data)
+
+
+# @api_view(['GET', 'POST', 'DELETE'])
+# def select_restaurant(request, pk):
+#     try:
+#         employee = Employee.objects.get(user_id=request.user.id)
+#     except Employee.DoesNotExist as e:
+#         return JsonResponse({'error': str(e)}, safe=False)
+#
+#     if request.method == 'GET':
+#
+
+
+@api_view(['GET'])
+def restaurant_tables(request, pk):
+    try:
+        restaurant = Restaurant.objects.get(id=pk)
+    except Restaurant.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+
+    serializer = TableSerializer(restaurant.tables, many=True)
+    return Response(serializer.data)

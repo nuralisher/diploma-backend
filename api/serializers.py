@@ -66,3 +66,4 @@ class PositionSerializer(serializers.ModelSerializer):
         model = Position
         fields = ('id', 'type', 'employee', 'restaurant')
 
+
