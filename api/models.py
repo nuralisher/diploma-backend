@@ -66,3 +66,5 @@ class Position(models.Model):
 
     class Meta:
         unique_together = ('employee', 'restaurant')
+
+#asjdflhakdsgo;lasjhi
