@@ -103,7 +103,7 @@ def get_my_restaurants(request):
     try:
         employee = Employee.objects.get(user_id=request.user.id)
     except Employee.DoesNotExist as e:
-        return JsonResponse({'error': str(e)}, safe=False)
+        return JsonResponse([], safe=False)
     if request.method == 'GET':
         restaurants = Restaurant.objects.filter(owner_id=employee.id) | Restaurant.objects.filter(employees__in=[employee])
         serializer = RestaurantCreateListSerializer(restaurants, many=True)
