@@ -35,11 +35,11 @@ class RestaurantCategory(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 class TableRestaurantSerializer(serializers.ModelSerializer):
-    menu_categories = RestaurantCategory(many=True)
+    # menu_categories = RestaurantCategory(many=True)
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'menu_categories')
+        fields = ('id', )
 
 
 class TableDetailSerializer(serializers.ModelSerializer):
