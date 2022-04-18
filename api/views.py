@@ -1,4 +1,7 @@
-from django.http import JsonResponse
+import logging
+
+import requests
+from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import generics, status
@@ -167,3 +170,9 @@ def restaurant_tables(request, pk):
 
     serializer = TableSerializer(restaurant.tables, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_image(request):
+    if (request.method == 'GET'):
+        return HttpResponse(requests.get(request.data.get('url')))

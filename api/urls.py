@@ -22,6 +22,8 @@ urlpatterns = [
     path('menu-categories/<int:pk>/menus/', categoryMenus),
     path('positions/', PositionList.as_view()),
     path('positions/<int:pk>', PositionDetail.as_view()),
+
+    path('image', get_image)
 ]
 # test
 
