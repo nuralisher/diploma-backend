@@ -6,7 +6,7 @@ class TableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Table
-        fields = ('id', 'qr_code', 'restaurant')
+        fields = ('id', 'qr_code', 'restaurant', 'number')
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class TableRestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('id', )
+        fields = ('id', 'number')
 
 
 class TableDetailSerializer(serializers.ModelSerializer):
@@ -47,7 +47,7 @@ class TableDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Table
-        fields = ('id', 'qr_code', 'restaurant')
+        fields = ('id', 'qr_code', 'restaurant', 'number')
 
 
 

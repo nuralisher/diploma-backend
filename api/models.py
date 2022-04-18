@@ -20,7 +20,11 @@ class Restaurant(models.Model):
 class Table(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     qr_code = models.ImageField(upload_to='qr_codes', blank=True)
+    number = models.IntegerField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='tables')
+
+    class Meta:
+        unique_together = ('restaurant', 'number')
 
     def save(self, *args, **kwargs):
         factory = qrcode.image.svg.SvgPathImage
