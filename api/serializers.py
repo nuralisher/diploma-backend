@@ -39,7 +39,7 @@ class TableRestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'number')
+        fields = ('id',)
 
 
 class TableDetailSerializer(serializers.ModelSerializer):
@@ -53,7 +53,7 @@ class TableDetailSerializer(serializers.ModelSerializer):
 
 class RestaurantCreateListSerializer(serializers.ModelSerializer):
     menu_categories = MenuCategorySerializer(read_only=True, many=True)
-    tables = TableRestaurantSerializer(read_only=True, many=True)
+    tables = TableSerializer(read_only=True, many=True)
     owner = serializers.CharField(read_only=True)
 
     class Meta:
