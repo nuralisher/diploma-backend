@@ -175,4 +175,4 @@ def restaurant_tables(request, pk):
 @api_view(['GET'])
 def get_image(request):
     if (request.method == 'GET'):
-        return HttpResponse(requests.get(request.data.get('url')))
+        return HttpResponse(requests.get(request.query_params.get('url')), content_type='image/svg+xml')
