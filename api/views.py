@@ -13,6 +13,7 @@ from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, 
     MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class ListTable(generics.ListCreateAPIView):
     queryset = Table.objects.all()
@@ -23,6 +24,7 @@ class DetailTable(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TableDetailSerializer
 
 class MenuList(generics.ListCreateAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
