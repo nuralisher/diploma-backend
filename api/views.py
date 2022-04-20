@@ -178,3 +178,15 @@ def restaurant_tables(request, pk):
 def get_image(request):
     if (request.method == 'GET'):
         return HttpResponse(requests.get(request.query_params.get('url')), content_type='image/svg+xml')
+
+
+@api_view(['GET'])
+def get_restaurant_menus(request, pk):
+    try:
+        restaurant = Restaurant.objects.get(id=pk)
+    except Restaurant.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    categories = MenuCategory.objects.filter(restaurant_id=restaurant.id)
+    menus = Menu.objects.filter(category__in=categories)
+    serializer = MenuSerializer(menus, many=True)
+    return Response(serializer.data)

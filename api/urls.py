@@ -18,6 +18,7 @@ urlpatterns = [
     path('restaurants/<int:pk>/', RestaurantDetail.as_view()),
     path('restaurants/<int:pk>/menu-categories/', restaurantCategories),
     path('restaurants/<int:pk>/employees', list_add_restaurant_employee),
+    path('restaurants/<int:pk>/menus', get_restaurant_menus),
     # path('restaurants/select', select_restaurant),
     path('menu-categories/<int:pk>/menus/', categoryMenus),
     path('positions/', PositionList.as_view()),
