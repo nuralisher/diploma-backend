@@ -215,3 +215,16 @@ class OrderDetail(generics.RetrieveDestroyAPIView):
     serializer_class = OrderSerializer
 
 
+@api_view(['GET'])
+def restaurant_orders(request, pk):
+    try:
+        restaurant = Restaurant.objects.get(id=pk)
+    except Restaurant.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'GET':
+        try:
+            order = Order.objects.get(restaurant=restaurant)
+        except Order.DoesNotExist as e:
+            return JsonResponse([], safe=False)
+        serializer = OrderSerializer(order, many=True)
+        return Response(serializer.data)
