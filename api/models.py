@@ -8,7 +8,7 @@ import qrcode.image.svg
 from django.dispatch import receiver
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from user_management.models import Employee
+from user_management.models import Employee, Client
 
 
 class Restaurant(models.Model):
@@ -70,3 +70,25 @@ class Position(models.Model):
 
     class Meta:
         unique_together = ('employee', 'restaurant')
+
+
+class Order(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='orders')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders')
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class OrderItemManager(models.Manager):
+    def create_order_item(self, menu, order, quantity):
+        menu = Menu.objects.get(pk=menu)
+        order_item = self.create(menu=menu, order=order, quantity=quantity)
+        return order_item
+
+
+class OrderItem(models.Model):
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    quantity = models.IntegerField()
+
+    objects = OrderItemManager()
+

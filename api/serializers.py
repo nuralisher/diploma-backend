@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Table, Restaurant, Menu, MenuCategory, Position
+from .models import Table, Restaurant, Menu, MenuCategory, Position, OrderItem, Order
 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -66,4 +66,23 @@ class PositionSerializer(serializers.ModelSerializer):
         model = Position
         fields = ('id', 'type', 'employee', 'restaurant')
 
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ('id', 'menu', 'quantity')
+
+
+class OrderItemWithoutIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ('menu', 'quantity')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    # order_items = serializers.RelatedField(many=True)
+
+    class Meta:
+        model = Order
+        fields = ('id', 'restaurant', 'client', 'created')
 

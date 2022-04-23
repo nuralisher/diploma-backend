@@ -8,9 +8,9 @@ from rest_framework import generics, status
 
 from user_management.models import Employee
 from user_management.serializers import EmployeeRegistrationSerializer
-from .models import Table, Menu, Restaurant, MenuCategory, Position
+from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
-    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer
+    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -190,3 +190,42 @@ def get_restaurant_menus(request, pk):
     menus = Menu.objects.filter(category__in=categories)
     serializer = MenuSerializer(menus, many=True)
     return Response(serializer.data)
+
+
+
+class OrderList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def perform_create(self, serializer):
+        order = serializer.save()
+        order_items = self.request.data['order_items']
+        for order_item in order_items:
+            OrderItem.objects.create_order_item(order_item['menu'], order, order_item['quantity'])
+
+
+@api_view(['GET', 'POST'])
+def create_order(request):
+    if request.method == 'GET':
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = request.data
+        order_data = {'client': data['client'], 'restaurant': data['restaurant']}
+        order_items = data['order_items']
+        order_serializer = OrderSerializer(data=order_data)
+        if order_serializer.is_valid():
+            order_serializer.save()
+            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(order_serializer._errors, status=status.HTTP_400_BAD_REQUEST)
+
+# PROBOO
+
+class OrderDetail(generics.RetrieveDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+
