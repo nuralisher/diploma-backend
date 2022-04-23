@@ -27,7 +27,7 @@ urlpatterns = [
 
     path('restaurants/<int:pk>/employees/', list_add_restaurant_employee),
 
-    #Orders
+    # Orders
     path('orders/', OrderList.as_view()),
     path('orders/<int:pk>/', OrderDetail.as_view()),
 ]

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import generics, status
 
-from user_management.models import Employee
+from user_management.models import Employee, Client
 from user_management.serializers import EmployeeRegistrationSerializer
 from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
@@ -212,8 +212,12 @@ def create_order(request):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        try:
+            client = Client.objects.get(user_id=request.user.id)
+        except Client.DoesNotExist as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         data = request.data
-        order_data = {'client': data['client'], 'restaurant': data['restaurant']}
+        order_data = {'client': client.id, 'restaurant': data['restaurant']}
         order_items = data['order_items']
         order_serializer = OrderSerializer(data=order_data)
         if order_serializer.is_valid():
