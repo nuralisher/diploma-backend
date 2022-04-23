@@ -80,8 +80,10 @@ class OrderItemWithoutIdSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     # order_items = serializers.RelatedField(many=True)
+    client = serializers.CharField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ('id', 'restaurant', 'created')
+        fields = ('id', 'restaurant', 'client', 'created', 'comment')
+
 

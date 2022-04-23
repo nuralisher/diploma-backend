@@ -199,7 +199,11 @@ class OrderList(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
 
     def perform_create(self, serializer):
-        order = serializer.save()
+        try:
+            client = Client.objects.get(user_id=self.request.user.id)
+        except Client.DoesNotExist as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+        order = serializer.save(client=client)
         order_items = self.request.data['order_items']
         for order_item in order_items:
             OrderItem.objects.create_order_item(order_item['menu'], order, order_item['quantity'])
@@ -225,7 +229,7 @@ def create_order(request):
             return Response(order_serializer.data, status=status.HTTP_201_CREATED)
         return Response(order_serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
-# PROBOO
+
 
 class OrderDetail(generics.RetrieveDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
