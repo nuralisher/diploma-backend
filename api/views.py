@@ -209,28 +209,6 @@ class OrderList(generics.ListCreateAPIView):
             OrderItem.objects.create_order_item(order_item['menu'], order, order_item['quantity'])
 
 
-@api_view(['GET', 'POST'])
-def create_order(request):
-    if request.method == 'GET':
-        orders = Order.objects.all()
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        try:
-            client = Client.objects.get(user_id=request.user.id)
-        except Client.DoesNotExist as e:
-            return JsonResponse({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
-        data = request.data
-        order_data = {'client': client.id, 'restaurant': data['restaurant']}
-        order_items = data['order_items']
-        order_serializer = OrderSerializer(data=order_data)
-        if order_serializer.is_valid():
-            order_serializer.save()
-            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(order_serializer._errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 class OrderDetail(generics.RetrieveDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     queryset = Order.objects.all()

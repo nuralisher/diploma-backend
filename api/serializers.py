@@ -81,9 +81,10 @@ class OrderItemWithoutIdSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     # order_items = serializers.RelatedField(many=True)
     client = serializers.CharField(read_only=True)
+    table_number = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ('id', 'restaurant', 'client', 'created', 'comment')
+        fields = ('id', 'table',  'table_number', 'restaurant', 'client', 'created', 'comment')
 
 

@@ -77,6 +77,7 @@ class Order(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders')
     comment = models.TextField(max_length=250, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='orders')
 
 
 class OrderItemManager(models.Manager):
