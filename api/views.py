@@ -223,7 +223,7 @@ def restaurant_orders(request, pk):
         return JsonResponse({'error': str(e)}, safe=False)
     if request.method == 'GET':
         try:
-            order = Order.objects.get(restaurant=restaurant)
+            order = Order.objects.filter(restaurant=restaurant)
         except Order.DoesNotExist as e:
             return JsonResponse([], safe=False)
         serializer = OrderSerializer(order, many=True)
