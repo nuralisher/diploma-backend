@@ -43,7 +43,6 @@ class TableRestaurantSerializer(serializers.ModelSerializer):
 
 
 class TableDetailSerializer(serializers.ModelSerializer):
-    restaurant = TableRestaurantSerializer()
 
     class Meta:
         model = Table
