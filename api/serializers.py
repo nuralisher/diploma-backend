@@ -78,14 +78,19 @@ class OrderItemWithoutIdSerializer(serializers.ModelSerializer):
         fields = ('menu', 'quantity')
 
 
+class TableNumberField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.number
+
 class OrderSerializer(serializers.ModelSerializer):
     # order_items = serializers.RelatedField(many=True)
     client = serializers.CharField(read_only=True)
-    table_number = serializers.IntegerField(read_only=True)
     order_items = OrderItemSerializer(read_only=True, many=True)
+    table = TableNumberField(read_only=True)
+    table_id = serializers.UUIDField()
 
     class Meta:
         model = Order
-        fields = ('id', 'table',  'table_number', 'restaurant', 'client', 'created', 'comment', 'order_items')
+        fields = ('id', 'table_id',  'table', 'restaurant', 'client', 'created', 'comment', 'order_items')
 
 

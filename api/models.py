@@ -26,6 +26,13 @@ class Table(models.Model):
     class Meta:
         unique_together = ('restaurant', 'number')
 
+    def __unicode__(self):
+        return self.number
+
+
+    def __int__(self):
+        return self.number
+
     def save(self, *args, **kwargs):
         factory = qrcode.image.svg.SvgPathImage
         qrcode_img = qrcode.make(self.id, box_size=24, border=1,  image_factory=factory)
