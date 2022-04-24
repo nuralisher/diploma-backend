@@ -11,7 +11,7 @@ from user_management.serializers import EmployeeRegistrationSerializer
 from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
     MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer, OrderDetailSerializer, \
-    UserSerializer
+    UserSerializer, ProfileEmployeeSerializer, ProfileClientSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -235,7 +235,13 @@ def restaurant_orders(request, pk):
 @api_view(['GET'])
 def me(request):
     try:
-        user = User.objects.get(id=request.user.id)
-        return Response(UserSerializer(user))
+        client = Client.objects.get(user_id=request.user.id)
+        serializer = ProfileClientSerializer(client)
+        return Response(serializer.data)
     except:
-        return JsonResponse({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            employee = Employee.objects.get(user_id=request.user.id)
+            serializer = ProfileEmployeeSerializer(employee)
+            return Response(serializer.data)
+        except:
+            return JsonResponse({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
