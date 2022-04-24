@@ -60,6 +60,9 @@ class Menu(models.Model):
     image = models.ImageField(upload_to='menu_images', blank=True)
     category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, related_name='menus')
 
+    def __str__(self):
+        return self.name
+
 
 @receiver(models.signals.post_delete, sender=Menu)
 def remove_file_from_s3(sender, instance, using, **kwargs):
@@ -87,6 +90,13 @@ class Order(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='orders')
 
 
+    # def get_total(self):
+    #     total = 0
+    #     for item in OrderItem.objects.filter(order=self):
+    #         total = item.menu.price
+    #     return total
+
+
 class OrderItemManager(models.Manager):
     def create_order_item(self, menu, order, quantity):
         menu = Menu.objects.get(pk=menu)
@@ -100,4 +110,5 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
 
     objects = OrderItemManager()
+
 

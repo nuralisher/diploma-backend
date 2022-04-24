@@ -94,3 +94,33 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ('id', 'table_id',  'table', 'restaurant', 'client', 'created', 'comment', 'order_items')
 
 
+
+class MenuPriceField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.price
+
+
+class OrderItemDetailSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField(source='menu', read_only=True)
+    price = MenuPriceField(source='menu', read_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ('id', 'name', 'price', 'quantity')
+
+
+class TotalCostField(serializers.RelatedField):
+    def to_representation(self, value):
+        total = 0
+        for item in value:
+            total += item.price
+        return total
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    order_items = OrderItemDetailSerializer(many=True)
+
+    class Meta:
+        model = Order
+        fields = ('id', 'table_id',  'table', 'client', 'created', 'comment', 'order_items',)
+

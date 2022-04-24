@@ -10,7 +10,7 @@ from user_management.models import Employee, Client
 from user_management.serializers import EmployeeRegistrationSerializer
 from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
-    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer
+    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer, OrderDetailSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -212,7 +212,7 @@ class OrderList(generics.ListCreateAPIView):
 class OrderDetail(generics.RetrieveDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderDetailSerializer
 
 
 @api_view(['GET'])
