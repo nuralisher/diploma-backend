@@ -119,6 +119,7 @@ class TotalCostField(serializers.RelatedField):
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     order_items = OrderItemDetailSerializer(many=True)
+    table = TableNumberField(read_only=True)
 
     class Meta:
         model = Order
