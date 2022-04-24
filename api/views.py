@@ -10,10 +10,12 @@ from user_management.models import Employee, Client
 from user_management.serializers import EmployeeRegistrationSerializer
 from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
-    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer, OrderDetailSerializer
+    MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer, OrderDetailSerializer, \
+    UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.contrib.auth.models import User
 
 class ListTable(generics.ListCreateAPIView):
     queryset = Table.objects.all()
@@ -228,3 +230,12 @@ def restaurant_orders(request, pk):
             return JsonResponse([], safe=False)
         serializer = OrderSerializer(order, many=True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def me(request):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        return JsonResponse(UserSerializer(user))
+    except:
+        return JsonResponse({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)

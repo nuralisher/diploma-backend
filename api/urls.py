@@ -30,6 +30,9 @@ urlpatterns = [
     # Orders
     path('orders/', OrderList.as_view()),
     path('orders/<int:pk>/', OrderDetail.as_view()),
-    path('restaurants/<int:pk>/orders', restaurant_orders),
+    path('restaurants/<int:pk>/orders/', restaurant_orders),
+
+    # me
+    path('me/', me)
 ]
 

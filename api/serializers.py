@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Table, Restaurant, Menu, MenuCategory, Position, OrderItem, Order
 
@@ -125,4 +126,11 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'table_id',  'table', 'client', 'created', 'comment', 'order_items',)
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'name', 'surname', 'email', 'is_client', 'is_employee')
 
