@@ -235,7 +235,7 @@ def restaurant_orders(request, pk):
 @api_view(['GET'])
 def me(request):
     try:
-        user = User.objects.get(pk=request.user.id)
-        return JsonResponse(UserSerializer(user))
+        user = User.objects.get(id=request.user.id)
+        return Response(UserSerializer(user))
     except:
         return JsonResponse({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
