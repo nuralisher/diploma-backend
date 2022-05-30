@@ -7,8 +7,8 @@ from django.shortcuts import render
 from rest_framework import generics, status
 
 from user_management.models import Employee, Client
-from user_management.serializers import EmployeeRegistrationSerializer
-from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem
+from user_management.serializers import EmployeeRegistrationSerializer, RestaurantsEmployeesSerializer
+from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem, PositionManager
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
     MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer, OrderDetailSerializer, \
     UserSerializer, ProfileEmployeeSerializer, ProfileClientSerializer
@@ -100,6 +100,7 @@ class PositionList(generics.ListCreateAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
 
+
 class PositionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
@@ -138,17 +139,31 @@ def list_add_restaurant_employee(request, pk):
         return JsonResponse({'error': str(e)}, safe=False)
     if request.method == 'GET':
         try:
-            employees = Employee.objects.get(restaurants__in=[restaurant])
+            employees = Employee.objects.filter(restaurants__in=[restaurant])
         except Employee.DoesNotExist as e:
             return JsonResponse([], safe=False)
-        serializer = EmployeeRegistrationSerializer(employees, many=True)
+        serializer = RestaurantsEmployeesSerializer(employees, many=True)
         return Response(serializer.data)
     if request.method == 'POST':
         try:
-            employee = Employee.objects.get(id=request.data.employeeId)
+            request.data['employeeID']
+        except KeyError:
+            return JsonResponse({'error': 'employee ID required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            request.data['position']
+        except KeyError:
+            return JsonResponse({'error': 'position required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            employee = Employee.objects.get(id=request.data['employeeID'])
         except Employee.DoesNotExist as e:
             return JsonResponse({'error': str(e)}, safe=False)
-        restaurant.employees.push(employee)
+
+        try:
+            position = Position.PositionType[request.data['position']]
+        except:
+            return JsonResponse({'error': 'no such position type'}, status=status.HTTP_400_BAD_REQUEST)
+        Position.objects.create_position(employee, restaurant, position)
+        restaurant.employees.add(employee)
         restaurant.save()
         serializer = RestaurantCreateListSerializer(restaurant)
         return Response(serializer.data)

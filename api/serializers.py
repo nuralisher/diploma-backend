@@ -56,11 +56,11 @@ class TableDetailSerializer(serializers.ModelSerializer):
 class RestaurantCreateListSerializer(serializers.ModelSerializer):
     menu_categories = MenuCategorySerializer(read_only=True, many=True)
     tables = TableSerializer(read_only=True, many=True)
-    owner = serializers.CharField(read_only=True)
+    # owner = serializers.CharField(read_only=True)
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'menu_categories', 'tables', 'owner')
+        fields = ('id', 'name', 'menu_categories', 'tables',)
 
 
 class PositionSerializer(serializers.ModelSerializer):

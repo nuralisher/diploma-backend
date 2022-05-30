@@ -35,3 +35,9 @@ class EmployeeRegistrationSerializer(RegisterSerializer):
         employee.save()
         return user
 
+
+class RestaurantsEmployeesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Employee
+        fields = ('id', 'first_name', 'last_name')

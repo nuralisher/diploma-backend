@@ -69,17 +69,24 @@ def remove_file_from_s3(sender, instance, using, **kwargs):
     instance.image.delete(save=False)
 
 
+class PositionManager(models.Manager):
+    def create_position(self, employee, restaurant, position):
+        order_item = self.create(employee=employee, restaurant=restaurant, type=position)
+        return order_item
+
+
 class Position(models.Model):
     class PositionType(models.TextChoices):
         ADMIN = 'ADMIN', _('Админ')
         WAITER = 'WAITER', _('Официант')
-        MANAGER = 'MANAGER', _('Менеджер')
     type = models.CharField(max_length=10, choices=PositionType.choices)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='positions')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='positions')
 
     class Meta:
         unique_together = ('employee', 'restaurant')
+
+    objects = PositionManager()
 
 
 class Order(models.Model):

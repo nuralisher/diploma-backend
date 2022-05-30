@@ -110,10 +110,10 @@ WSGI_APPLICATION = 'diplomaBackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'demo_1',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'Alisher11',
-        'HOST': 'database-2.cbe1b25uahqs.us-east-1.rds.amazonaws.com',
+        'HOST': 'database-2.cpowhdtoicbn.us-east-1.rds.amazonaws.com',
         'PORT': 5432
     }
 }
@@ -175,9 +175,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 
-AWS_ACCESS_KEY_ID = 'AKIAZLHEX6YL7ZVKRN57'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'alisher'
+# AWS_ACCESS_KEY_ID = 'AKIAZLHEX6YL7ZVKRN57'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'alisher'
+AWS_ACCESS_KEY_ID = 'AKIAZJMQ4QAVLP44YG2T'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'mojno-menu-bucket'
 
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
