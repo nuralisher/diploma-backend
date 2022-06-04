@@ -145,6 +145,7 @@ class EmployeeList(GenericAPIView):
         for employee in serializer.data:
             user = User.objects.get(id=employee['user_id'])
             data = {
+                'id': employee['id'],
                 'full_name': employee['first_name'] + ' ' + employee['last_name'],
                 'email': user.email,
             }
@@ -169,6 +170,7 @@ def list_add_restaurant_employee(request, pk):
             user = User.objects.get(id=employee['user_id'])
             position = Position.objects.get(employee_id=employee['id'], restaurant_id=restaurant.id)
             data = {
+                'id': employee['id'],
                 'full_name': employee['first_name'] + ' ' + employee['last_name'],
                 'email': user.email,
                 'position': position.type,
