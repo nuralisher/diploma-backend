@@ -120,8 +120,9 @@ def get_my_restaurants(request):
         serializer = RestaurantCreateListSerializer(restaurants, many=True)
         restaurants_list = []
         for restaurant in serializer.data:
-            position = Position.objects.get(employee_id=employee.id, restaurant_id=restaurant.id)
+            position = Position.objects.get(employee_id=employee.id, restaurant_id=restaurant['id'])
             restaurants_list.append({
+                'id': restaurant['id'],
                 'name': restaurant['name'],
                 'position': position.type,
             })
