@@ -40,4 +40,4 @@ class RestaurantsEmployeesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'first_name', 'last_name')
+        fields = ('id', 'first_name', 'last_name', 'user_id')

@@ -143,6 +143,17 @@ def list_add_restaurant_employee(request, pk):
         except Employee.DoesNotExist as e:
             return JsonResponse([], safe=False)
         serializer = RestaurantsEmployeesSerializer(employees, many=True)
+        employeesList = []
+        for employee in serializer.data:
+            user = User.objects.get(id=employee['user_id'])
+            position = Position.objects.get(employee_id=employee['id'], restaurant_id=restaurant.id)
+            data = {
+                'full_name': employee['first_name'] + ' ' + employee['last_name'],
+                'email': user.email,
+                'position': position.type,
+            }
+            employeesList.append(data)
+            return JsonResponse(employeesList, safe=False)
         return Response(serializer.data)
     if request.method == 'POST':
         try:
