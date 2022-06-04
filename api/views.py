@@ -16,6 +16,9 @@ from rest_framework.decorators import api_view
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
+from rest_framework.generics import GenericAPIView
+from rest_framework.filters import *
+
 
 class ListTable(generics.ListCreateAPIView):
     queryset = Table.objects.all()
@@ -131,6 +134,24 @@ def get_all_restaurants(request):
         return Response(serializer.data)
 
 
+class EmployeeList(GenericAPIView):
+    filter_backends = [SearchFilter]
+    search_fields = ['first_name', 'last_name', 'user__email']
+
+    def get(self, request):
+        employees = self.filter_queryset(Employee.objects.all())
+        serializer = RestaurantsEmployeesSerializer(employees, many=True)
+        employeesList = []
+        for employee in serializer.data:
+            user = User.objects.get(id=employee['user_id'])
+            data = {
+                'full_name': employee['first_name'] + ' ' + employee['last_name'],
+                'email': user.email,
+            }
+            employeesList.append(data)
+        return JsonResponse(employeesList, safe=False)
+
+
 @api_view(['GET', 'POST'])
 def list_add_restaurant_employee(request, pk):
     try:
@@ -153,8 +174,7 @@ def list_add_restaurant_employee(request, pk):
                 'position': position.type,
             }
             employeesList.append(data)
-            return JsonResponse(employeesList, safe=False)
-        return Response(serializer.data)
+        return JsonResponse(employeesList, safe=False)
     if request.method == 'POST':
         try:
             request.data['employeeID']
@@ -271,3 +291,5 @@ def me(request):
             return Response(serializer.data)
         except:
             return JsonResponse({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+

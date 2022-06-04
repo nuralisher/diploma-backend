@@ -37,6 +37,9 @@ urlpatterns = [
     path('positions/<int:pk>', PositionDetail.as_view()),
 
     # me
-    path('me/', me)
+    path('me/', me),
+
+    # empoyee
+    path('employees/', EmployeeList.as_view())
 ]
 
