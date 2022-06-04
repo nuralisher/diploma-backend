@@ -118,7 +118,14 @@ def get_my_restaurants(request):
     if request.method == 'GET':
         restaurants = Restaurant.objects.filter(owner_id=employee.id) | Restaurant.objects.filter(employees__in=[employee])
         serializer = RestaurantCreateListSerializer(restaurants, many=True)
-        return Response(serializer.data)
+        restaurants_list = []
+        for restaurant in serializer.data:
+            position = Position.objects.get(employee_id=employee.id, restaurant_id=restaurant.id)
+            restaurants_list.append({
+                'name': restaurant['name'],
+                'position': position.type,
+            })
+        return JsonResponse(restaurants_list, safe=False)
 
 
 @api_view(['GET'])
