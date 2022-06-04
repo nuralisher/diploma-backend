@@ -26,6 +26,7 @@ urlpatterns = [
 
 
     path('restaurants/<int:pk>/employees/', list_add_restaurant_employee),
+    path('restaurants/employees/', update_or_delete_employee),
 
     # Orders
     path('orders/', OrderList.as_view()),
@@ -39,7 +40,7 @@ urlpatterns = [
     # me
     path('me/', me),
 
-    # empoyee
+    # employee
     path('employees/', EmployeeList.as_view())
 ]
 

@@ -139,17 +139,36 @@ class EmployeeList(GenericAPIView):
     search_fields = ['first_name', 'last_name', 'user__email']
 
     def get(self, request):
+        try:
+            restaurant_id = self.request.query_params['restaurant_id']
+        except:
+            restaurant_id = False
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except Restaurant.DoesNotExist as e:
+            return JsonResponse({'error': str(e)}, safe=False)
         employees = self.filter_queryset(Employee.objects.all())
         serializer = RestaurantsEmployeesSerializer(employees, many=True)
         employeesList = []
         for employee in serializer.data:
             user = User.objects.get(id=employee['user_id'])
+            if restaurant_id:
+                try:
+                    position = Position.objects.get(employee_id=employee['id'], restaurant_id=restaurant_id)
+                except:
+                    if employee['id'] == restaurant.owner_id:
+                        position = True
+                    else:
+                        position = False
+            else:
+                position = False
             data = {
                 'id': employee['id'],
                 'full_name': employee['first_name'] + ' ' + employee['last_name'],
                 'email': user.email,
             }
-            employeesList.append(data)
+            if not position:
+                employeesList.append(data)
         return JsonResponse(employeesList, safe=False)
 
 
@@ -202,15 +221,32 @@ def list_add_restaurant_employee(request, pk):
         return Response(serializer.data)
 
 
-# @api_view(['GET', 'POST', 'DELETE'])
-# def select_restaurant(request, pk):
-#     try:
-#         employee = Employee.objects.get(user_id=request.user.id)
-#     except Employee.DoesNotExist as e:
-#         return JsonResponse({'error': str(e)}, safe=False)
-#
-#     if request.method == 'GET':
-#
+@api_view(['DELETE', 'PUT'])
+def update_or_delete_employee(request):
+    position = request.data['position']
+    employee_id = request.data['employee_id']
+    restaurant_id = request.data['restaurant_id']
+    try:
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+    except Restaurant.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    try:
+        employee = Employee.objects.get(id=employee_id)
+    except Employee.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    try:
+        position = Position.PositionType[request.data['position']]
+    except:
+        return JsonResponse({'error': 'no such position type'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'PUT':
+        Position.objects.filter(employee_id=employee_id, restaurant_id=restaurant_id).update(type=position)
+        return JsonResponse({'status': 'OK'})
+    elif request.method == 'DELETE':
+        Position.objects.filter(employee_id=employee_id, restaurant_id=restaurant_id).delete()
+        restaurant.employees.remove(employee)
+        restaurant.save()
+        return JsonResponse({'status': 'OK'})
 
 
 @api_view(['GET'])
