@@ -89,6 +89,19 @@ class Position(models.Model):
     objects = PositionManager()
 
 
+class Call(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='calls')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='calls')
+    created = models.DateTimeField(auto_now_add=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='calls')
+
+    class CallType(models.TextChoices):
+        CALL = 'CALL', _('Вызов')
+        PAYMENT_WITH_CARD = 'PAYMENT_WITH_CARD', _('Оплата с картой')
+        CASH_PAYMENT = 'CASH_PAYMENT', _('Оплата наличным')
+    type = models.CharField(max_length=20, choices=CallType.choices)
+
+
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='orders')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders')
@@ -117,5 +130,4 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
 
     objects = OrderItemManager()
-
 

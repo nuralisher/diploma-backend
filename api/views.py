@@ -8,10 +8,10 @@ from rest_framework import generics, status
 
 from user_management.models import Employee, Client
 from user_management.serializers import EmployeeRegistrationSerializer, RestaurantsEmployeesSerializer
-from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem, PositionManager
+from .models import Table, Menu, Restaurant, MenuCategory, Position, Order, OrderItem, PositionManager, Call
 from .serializers import TableSerializer, MenuSerializer, RestaurantSerializer, TableDetailSerializer, \
     MenuCategorySerializer, RestaurantCreateListSerializer, PositionSerializer, OrderSerializer, OrderDetailSerializer, \
-    UserSerializer, ProfileEmployeeSerializer, ProfileClientSerializer
+    UserSerializer, ProfileEmployeeSerializer, ProfileClientSerializer, CallDetailSerializer, CallSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -312,6 +312,24 @@ class OrderDetail(generics.RetrieveDestroyAPIView):
     serializer_class = OrderDetailSerializer
 
 
+class CallList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    queryset = Call.objects.all()
+    serializer_class = CallSerializer
+
+    def perform_create(self, serializer):
+        try:
+            client = Client.objects.get(user_id=self.request.user.id)
+        except Client.DoesNotExist as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+        serializer.save(client=client)
+
+
+class CallDetail(generics.RetrieveDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    queryset = Call.objects.all()
+    serializer_class = CallDetailSerializer
+
 @api_view(['GET'])
 def restaurant_orders(request, pk):
     try:
@@ -324,6 +342,20 @@ def restaurant_orders(request, pk):
         except Order.DoesNotExist as e:
             return JsonResponse([], safe=False)
         serializer = OrderSerializer(order, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def restaurant_calls(request, pk):
+    try:
+        restaurant = Restaurant.objects.get(id=pk)
+    except Restaurant.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'GET':
+        try:
+            call = Call.objects.filter(restaurant=restaurant)
+        except Call.DoesNotExist as e:
+            return JsonResponse([], safe=False)
+        serializer = CallSerializer(call, many=True)
         return Response(serializer.data)
 
 

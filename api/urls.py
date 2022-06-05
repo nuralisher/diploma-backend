@@ -33,6 +33,11 @@ urlpatterns = [
     path('orders/<int:pk>/', OrderDetail.as_view()),
     path('restaurants/<int:pk>/orders/', restaurant_orders),
 
+    # Calls
+    path('calls/', CallList.as_view()),
+    path('calls/<int:pk>/', CallDetail.as_view()),
+    path('restaurants/<int:pk>/calls/', restaurant_calls),
+
     # Positions
     path('positions/', PositionList.as_view()),
     path('positions/<int:pk>', PositionDetail.as_view()),

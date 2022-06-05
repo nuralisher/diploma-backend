@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from user_management.models import Client, Employee
-from .models import Table, Restaurant, Menu, MenuCategory, Position, OrderItem, Order
+from .models import Table, Restaurant, Menu, MenuCategory, Position, OrderItem, Order, Call
 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -85,6 +85,17 @@ class TableNumberField(serializers.RelatedField):
     def to_representation(self, value):
         return value.number
 
+
+class CallSerializer(serializers.ModelSerializer):
+    client = serializers.CharField(read_only=True)
+    table = TableNumberField(read_only=True)
+    table_id = serializers.UUIDField()
+
+    class Meta:
+        model = Call
+        fields = ('id', 'table_id',  'table', 'restaurant', 'client', 'created', 'type')
+
+
 class OrderSerializer(serializers.ModelSerializer):
     # order_items = serializers.RelatedField(many=True)
     client = serializers.CharField(read_only=True)
@@ -118,6 +129,15 @@ class TotalCostField(serializers.RelatedField):
         for item in value:
             total += item.price
         return total
+
+
+class CallDetailSerializer(serializers.ModelSerializer):
+    table = TableNumberField(read_only=True)
+    client = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Call
+        fields = ('id', 'table_id',  'table', 'client', 'created', 'type',)
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
