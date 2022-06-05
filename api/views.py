@@ -427,6 +427,7 @@ def table_call(request, pk):
         return Response(serializer.data)
     elif request.method == 'POST':
         call.status = Call.CallStatus.OPEN
+        call.type = request.data['type']
         call.save()
         serializer = CallDetailSerializer(call)
         return Response(serializer.data)
