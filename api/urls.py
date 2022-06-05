@@ -46,6 +46,7 @@ urlpatterns = [
     path('positions/', PositionList.as_view()),
     path('positions/<int:pk>', PositionDetail.as_view()),
 
+
     # me
     path('me/', me),
 
