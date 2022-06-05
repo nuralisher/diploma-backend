@@ -92,8 +92,9 @@ class Position(models.Model):
 class Call(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='calls')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='calls')
-    created = models.DateTimeField(auto_now_add=True)
-    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='calls')
+    # created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now=True)
+    table = models.OneToOneField(Table, on_delete=models.CASCADE, related_name='call')
 
     class CallType(models.TextChoices):
         CALL = 'CALL', _('Вызов')

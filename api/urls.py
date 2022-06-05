@@ -40,6 +40,7 @@ urlpatterns = [
     path('calls/<int:pk>/cancel/', cancel_call),
     path('restaurants/<int:pk>/calls/', restaurant_calls),
     path('my-call/', get_status_call),
+    path('tables/<uuid:pk>/call/', table_call),
 
     # Positions
     path('positions/', PositionList.as_view()),

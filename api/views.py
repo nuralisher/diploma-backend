@@ -368,6 +368,7 @@ def close_call(request, pk):
     if request.method == 'PUT':
         call.status = Call.CallStatus.CLOSED
         call.save()
+        return JsonResponse({'status': 'OK'}, safe=False)
 
 
 @api_view(['PUT'])
@@ -394,6 +395,52 @@ def get_status_call(request):
             return Response(serializer.data)
         except:
             return JsonResponse({'status': 'no call'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def table_call(request, pk):
+    try:
+        table = Table.objects.get(id=pk)
+    except Table.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+
+    try:
+        client = Client.objects.get(user_id=request.user.id)
+    except Client.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+
+    try:
+        call = table.call
+    except Call.DoesNotExist as e:
+        if request.method == 'POST':
+            try:
+                restaurant = Restaurant.objects.get(id=request.data['restaurant'])
+            except Restaurant.DoesNotExist as e:
+                return JsonResponse({'error': str(e)}, safe=False)
+            call = Call(client=client, restaurant=restaurant, table=table)
+            call.save()
+            serializer = CallDetailSerializer(call)
+            return Response(serializer.data)
+        return JsonResponse({'status': 'call not created'}, safe=False, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = CallDetailSerializer(call)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        call.status = Call.CallStatus.OPEN
+        call.save()
+        serializer = CallDetailSerializer(call)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        call.status = Call.CallStatus.CANCELLED
+        call.save()
+        serializer = CallDetailSerializer(call)
+        return Response(serializer.data)
+    elif request.method == 'DELETE':
+        call.status = Call.CallStatus.CLOSED
+        call.save()
+        serializer = CallDetailSerializer(call)
+        return Response(serializer.data)
+
 
 @api_view(['GET'])
 def me(request):
