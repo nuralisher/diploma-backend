@@ -417,7 +417,7 @@ def table_call(request, pk):
                 restaurant = Restaurant.objects.get(id=request.data['restaurant'])
             except Restaurant.DoesNotExist as e:
                 return JsonResponse({'error': str(e)}, safe=False)
-            call = Call(client=client, restaurant=restaurant, table=table)
+            call = Call(client=client, restaurant=restaurant, table=table, type=request.data['type'], status=request.data['status'])
             call.save()
             serializer = CallDetailSerializer(call)
             return Response(serializer.data)
