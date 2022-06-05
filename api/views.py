@@ -404,10 +404,6 @@ def table_call(request, pk):
     except Table.DoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False)
 
-    try:
-        client = Client.objects.get(user_id=request.user.id)
-    except Client.DoesNotExist as e:
-        return JsonResponse({'error': str(e)}, safe=False)
 
     try:
         call = table.call
@@ -416,6 +412,10 @@ def table_call(request, pk):
             try:
                 restaurant = Restaurant.objects.get(id=request.data['restaurant'])
             except Restaurant.DoesNotExist as e:
+                return JsonResponse({'error': str(e)}, safe=False)
+            try:
+                client = Client.objects.get(user_id=request.user.id)
+            except Client.DoesNotExist as e:
                 return JsonResponse({'error': str(e)}, safe=False)
             call = Call(client=client, restaurant=restaurant, table=table, type=request.data['type'], status=request.data['status'])
             call.save()
