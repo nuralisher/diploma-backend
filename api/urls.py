@@ -36,7 +36,10 @@ urlpatterns = [
     # Calls
     path('calls/', CallList.as_view()),
     path('calls/<int:pk>/', CallDetail.as_view()),
+    path('calls/<int:pk>/close', CallDetail.as_view()),
+    path('calls/<int:pk>/cancel', CallDetail.as_view()),
     path('restaurants/<int:pk>/calls/', restaurant_calls),
+    path('my-call/', get_status_call),
 
     # Positions
     path('positions/', PositionList.as_view()),

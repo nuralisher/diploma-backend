@@ -101,6 +101,12 @@ class Call(models.Model):
         CASH_PAYMENT = 'CASH_PAYMENT', _('Оплата наличным')
     type = models.CharField(max_length=20, choices=CallType.choices)
 
+    class CallStatus(models.TextChoices):
+        OPEN = 'OPEN', _('Open')
+        CANCELLED = 'CANCELLED', _('Cancelled')
+        CLOSED = 'CLOSED', _('Closed')
+    status = models.CharField(max_length=20, choices=CallStatus.choices,)
+
 
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='orders')

@@ -93,7 +93,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Call
-        fields = ('id', 'table_id',  'table', 'restaurant', 'client', 'created', 'type')
+        fields = ('id', 'table_id',  'table', 'restaurant', 'client', 'created', 'type', 'status')
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -123,13 +123,6 @@ class OrderItemDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'price', 'quantity')
 
 
-class TotalCostField(serializers.RelatedField):
-    def to_representation(self, value):
-        total = 0
-        for item in value:
-            total += item.price
-        return total
-
 
 class CallDetailSerializer(serializers.ModelSerializer):
     table = TableNumberField(read_only=True)
@@ -137,7 +130,7 @@ class CallDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Call
-        fields = ('id', 'table_id',  'table', 'client', 'created', 'type',)
+        fields = ('id', 'table_id',  'table', 'client', 'created', 'type', 'status')
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):

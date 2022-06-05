@@ -359,11 +359,48 @@ def restaurant_calls(request, pk):
         return Response(serializer.data)
 
 
+@api_view(['PUT'])
+def close_call(request, pk):
+    try:
+        call = Call.objects.get(id=pk)
+    except Call.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'PUT':
+        call.status = Call.CallStatus.CLOSED
+        call.save()
+
+
+@api_view(['PUT'])
+def cancel_call(request, pk):
+    try:
+        call = Call.objects.get(id=pk)
+    except Call.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'PUT':
+        call.status = Call.CallStatus.CANCELLED
+        call.save()
+        return JsonResponse({'status': 'OK'}, safe=False)
+
+@api_view(['GET'])
+def get_status_call(request):
+    try:
+        client = Client.objects.get(user_id=request.user.id)
+    except Client.DoesNotExist as e:
+        return JsonResponse({'error': str(e)}, safe=False)
+    if request.method == 'GET':
+        try:
+            call = Call.objects.get(status=Call.CallStatus.OPEN)
+            serializer = CallDetailSerializer(call)
+            return Response(serializer.data)
+        except:
+            return JsonResponse({'status': 'no call'}, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
 def me(request):
     try:
         client = Client.objects.get(user_id=request.user.id)
         serializer = ProfileClientSerializer(client)
+
         return Response(serializer.data)
     except:
         try:
